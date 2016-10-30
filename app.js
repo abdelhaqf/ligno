@@ -3,6 +3,23 @@ pug=require('pug')
 stylus=require('express-stylus')
 nib=require('nib')
 bootstrap=require('bootstrap-styl')
+mysql=require('mysql')
+
+connection=mysql.createConnection({
+	host:'localhost',
+	user:'root',
+	password:'',
+	database:'ligno'
+})
+connection.connect(function(err){
+	if(err) console.log('db connection failed!')
+	else console.log('db connected!')
+})
+function getEmployees(){
+	connection.query('select * from employees',function(err,rows,fields){
+		console.log(rows)
+	})
+}
 
 app=express()
 app.set('view engine','pug')
@@ -13,6 +30,9 @@ app.get('/',function(req,res){
 })
 app.get('/overtime',function(req,res){
 	res.render('overtime')
+})
+app.get('/employees',function(req,res){
+	res.json(getEmployees())
 })
 //route end
 
