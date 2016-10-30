@@ -1,6 +1,8 @@
 express=require('express')
 pug=require('pug')
 stylus=require('express-stylus')
+nib=require('nib')
+bootstrap=require('bootstrap-styl')
 
 app=express()
 app.set('view engine','pug')
@@ -10,7 +12,9 @@ app.get('/',function(req,res){
 })
 
 app.use(stylus({
-	src:'public'
+	src:'public',
+	use:[nib(),bootstrap()],
+	import:['nib','bootstrap']
 }))
 app.use(express.static('public'))
 
