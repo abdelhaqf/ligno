@@ -1,11 +1,15 @@
 extends template
 block CONTENT
-	div.panel.panel-primary
+	div.panel.panel-primary(ng-app="employee_app",ng-controller="employee_ctrl")
 		div.panel-heading Overtime
 		div.panel-body
 		table.table
 			select.form-control
-				option a
-				option b
+				option(ng-repeat="emp in employees") {{emp.name}}
 			input.form-control
-			input.form-control(type='submit')
+			input.form-control
+			div
+				button(ng-click="click()") click
+	script(src='/angular/angular.js')
+	script(src='/js/employee.js')
+		

@@ -9,6 +9,7 @@
   "author": "Abdel Haq Firdausy",
   "license": "ISC",
   "dependencies": {
+    "angular": "^1.5.8",
     "bootstrap-styl": "^5.0.8",
     "express": "^4.14.0",
     "express-stylus": "^0.1.0",

@@ -15,9 +15,9 @@ connection.connect(function(err){
 	if(err) console.log('db connection failed!')
 	else console.log('db connected!')
 })
-function getEmployees(){
+function getEmployees(res){
 	connection.query('select * from employees',function(err,rows,fields){
-		console.log(rows)
+		res.send(rows)
 	})
 }
 
@@ -32,7 +32,9 @@ app.get('/overtime',function(req,res){
 	res.render('overtime')
 })
 app.get('/employees',function(req,res){
-	res.json(getEmployees())
+	connection.query('select * from employees',function(err,rows,fields){
+		getEmployees(res)
+	})
 })
 //route end
 
