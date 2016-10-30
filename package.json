@@ -1,0 +1,14 @@
+{
+  "name": "ligno",
+  "version": "1.0.0",
+  "description": "pusat informasi karyawan",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Abdel Haq Firdausy",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.14.0"
+  }
+}
