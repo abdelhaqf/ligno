@@ -5,11 +5,24 @@ block CONTENT
 		div.panel-body
 		table.table
 			select.form-control
-				option(ng-repeat="emp in employees") {{emp.name}}
+				option(ng-repeat="emp in employees",values="{{emp.id}}") {{emp.name}}
 			input.form-control
 			input.form-control
 			div
 				button(ng-click="click()") click
-	script(src='/angular/angular.js')
-	script(src='/js/employee.js')
-		
+	script.
+		var app = angular.module('employee_app',[])
+		app.controller('employee_ctrl',function($scope, $http) {
+		    $scope.click = function() {
+		    	$scope.employees=[]
+		        var response = $http.get('/employees')
+		        response.success(function(data, status, headers, config) {
+		            $scope.employees=data
+		        })
+		        response.error(function(data, status, headers, config) {
+		            alert("Error.")
+		        })
+		    }
+		    $scope.click()
+		})
+				
