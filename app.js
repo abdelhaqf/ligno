@@ -32,10 +32,23 @@ function getOvertimes(res){
 		res.send(rows)
 	})	
 }
-function addOvertimes(res){
-	connection.query('select * from overtimes join employees on overtimes.employee_id=employees.id',function(err,rows,fields){
-		res.send(rows)
-	})	
+function addOvertimes(req,res){
+	console.log(req.body.date)
+	temp=connection.query(
+		"insert into overtimes(employee_id,date,duration,info) values(?,?,?,?)",
+		[
+			req.body.emp_id,
+			req.body.date,
+			req.body.duration,
+			req.body.info
+		],function(err,results){
+			if(!err)res.send('OK')
+			else {
+				//console.log(err)
+				res.statusCode=400
+				res.send('error')
+			}
+	})
 }
 
 app.set('view engine','pug')
@@ -51,8 +64,7 @@ app.get('/overtime/show',function(req,res){
 	getOvertimes(res)
 })
 app.post('/overtime/add',function(req,res){
-	addOvertimes(res)
-	console.log(req.body)
+	addOvertimes(req,res)
 })
 app.get('/employees',function(req,res){
 	getEmployees(res)
