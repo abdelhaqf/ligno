@@ -1,19 +1,59 @@
 extends template
 block CONTENT
-	div.panel.panel-primary(ng-app="employee_app",ng-controller="employee_ctrl")
+	div.panel.panel-primary(ng-app='employee_app',ng-controller='employee_ctrl')
 		div.panel-heading Overtime
 		div.panel-body
-		table.table
-			select.form-control
-				option(ng-repeat="emp in employees",values="{{emp.id}}") {{emp.name}}
-			input.form-control
-			input.form-control
-			div
-				button(ng-click="click()") click
+			form(ng-submit='addovertime()')
+				select.form-control(ng-model='ot.emp_id')
+					option(ng-repeat='emp in employees',ng-value='{{emp.id}}') {{emp.name}}
+				input.form-control(type='number',step='0.25',placeholder='total waktu lembur dalam jam',ng-model='ot.duration')
+				input.form-control(type='date',ng-model='ot.date')
+				input.form-control(placeholder='keperluan lembur',ng-model='ot.info',name='empabdel')
+				input.form-control.btn-primary(type='submit')
+		table.table.table-stripped
+			tr
+				td a
+			tr 
+				td b
+			tr(ng-repeat='ovt in overtimes')
+				td {{ovt.name}}
+				td {{ovt.duration}}
+				td {{ovt.date}}
+				td {{ovt.info}}
 	script.
 		var app = angular.module('employee_app',[])
 		app.controller('employee_ctrl',function($scope, $http) {
-		    $scope.click = function() {
+		    $scope.showovertime = function() {
+		    	$scope.overtimes=[]
+		        var response = $http.get('/overtime/show')
+		        response.success(function(data, status, headers, config) {
+		            $scope.overtimes=data
+		        })
+		        response.error(function(data, status, headers, config) {
+		            alert("Error.")
+		        })
+		    }
+		    $scope.ot={}
+			$scope.addovertime = function() {
+		    	var response = $http.get('/overtime/show')
+		        response.success(function(data, status, headers, config) {
+		            $scope.overtimes=data
+		        })
+		        response.error(function(data, status, headers, config) {
+		            alert("Error.")
+		        })
+		        $http({
+		        	method:'POST',
+		        	url:'/overtime/add',
+		        	data:$scope.ot
+		        }).then(function successCallback(res){
+		        	alert('ok')
+		        }),function errorCallback(res){
+		        	alert('error')
+		        }
+
+		    }
+		    $scope.getemployees = function() {
 		    	$scope.employees=[]
 		        var response = $http.get('/employees')
 		        response.success(function(data, status, headers, config) {
@@ -23,6 +63,7 @@ block CONTENT
 		            alert("Error.")
 		        })
 		    }
-		    $scope.click()
+		    $scope.getemployees()
+		    $scope.showovertime()
 		})
 				
