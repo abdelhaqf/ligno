@@ -3,22 +3,47 @@ block CONTENT
 	div.panel.panel-primary(ng-app='overtime_app',ng-controller='overtime_ctrl')
 		div.panel-heading Overtime
 		div.panel-body
-			form(ng-submit='addovertime()')
+			form(ng-submit='addtempovertime()')
 				select.form-control(ng-model='overtimeform.emp_id')
 					option(ng-repeat='e in employees',ng-value='{{e.id}}') {{e.name}}
 				input.form-control(type='number',step='0.25',placeholder='total waktu lembur dalam jam',ng-model='overtimeform.duration')
 				input.form-control(type='date',ng-model='overtimeform.date')
 				input.form-control(placeholder='keperluan lembur',ng-model='overtimeform.info')
-				input.form-control.btn-primary(type='submit')
+				input.form-control.btn-primary(type='submit',value='OK')
+		table.table.table-stripped
+			tr(ng-repeat='t in temp_input track by $index')
+				td {{t.emp_id}}
+				td {{t.duration}}
+				td {{t.date|date:'d - MMM - yyyy'}}
+				td {{t.info}}
+				td 
+					<button data-ng-click="removetempovertime($index)">Remove</button>
+			tr
+				td
+					div(ng-show='temp_input.length')
+						button.btn(ng-click='addovertimearray()') Confirm Insert
 		table.table.table-stripped
 			tr(ng-repeat='o in overtimes')
 				td {{o.name}}
 				td {{o.duration}}
 				td {{o.date|date:'d - MMM - yyyy'}}
 				td {{o.info}}
+
 	script.
 		var app = angular.module('overtime_app',[])
 		app.controller('overtime_ctrl',function($scope, $http) {
+
+			$scope.temp_input=[]
+			$scope.overtimeform={}
+
+			$scope.addtempovertime=function(){
+				option={month:'2-digit',year:'numeric',day:'2-digit'}
+				$scope.overtimeform.date_modified=$scope.overtimeform.date.toLocaleString('en-US',option)
+				$scope.temp_input.push((JSON.parse(JSON.stringify($scope.overtimeform))))
+			}
+			$scope.removetempovertime=function($index){
+				$scope.temp_input.splice($index,1)
+			}
 		    $scope.showovertime = function() {
 		    	$scope.overtimes=[]
 		        var response = $http.get('/overtime/show')
@@ -29,7 +54,7 @@ block CONTENT
 		            alert("Error.")
 		        })
 		    }
-		    $scope.overtimeform={}
+		    
 
 			$scope.addovertime = function() {
 				option={month:'2-digit',year:'numeric',day:'2-digit'}
@@ -41,6 +66,17 @@ block CONTENT
 			        	data:$scope.overtimeform
 			        }
 		    	$http.post('/overtime/add', $scope.overtimeform, cfg).then(function(x){$scope.showovertime()}, function(y){alert('error')});
+		    }
+		    $scope.addovertimearray = function() {
+				option={month:'2-digit',year:'numeric',day:'2-digit'}
+		    	$scope.overtimeform.date_modified=$scope.overtimeform.date.toLocaleString('en-US',option)
+		    	console.log($scope.overtimeform.date_modified)
+		    	cfg={
+			        	method:'POST',
+			        	url:'/overtime/addarray',
+			        	data:$scope.temp_input
+			        }
+		    	$http.post('/overtime/addarray', $scope.temp_input, cfg).then(function(x){$scope.showovertime()}, function(y){alert('error')});
 		    }
 		    $scope.getemployees = function() {
 		    	$scope.employees=[]
