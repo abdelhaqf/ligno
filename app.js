@@ -44,7 +44,7 @@ function addOvertimesarray(req,res){
 		temp=connection.query(
 			"insert into overtimes(employee_id,date,duration,info) values(?,?,?,?)",
 			[
-				req.body[i].emp_id,
+				req.body[i].emp_id.id,
 				t_mysql_date,
 				req.body[i].duration,
 				req.body[i].info
@@ -55,9 +55,8 @@ function addOvertimesarray(req,res){
 		})
 	}
 	if(is_error){
-
-					res.statusCode=400
-					res.send('error')
+		res.statusCode=400
+		res.send('error')
 	}else {
 		res.send('ok')
 	}
