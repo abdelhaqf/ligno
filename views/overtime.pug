@@ -10,19 +10,19 @@ block CONTENT
 				input.form-control(type='date',ng-model='overtimeform.date')
 				input.form-control(placeholder='keperluan lembur',ng-model='overtimeform.info')
 				input.form-control.btn-primary(type='submit',value='OK')
-		table.table.table-stripped
+		table.table.table-striped
 			tr(ng-repeat='t in temp_input track by $index')
 				td {{t.emp_id}}
 				td {{t.duration}}
 				td {{t.date|date:'d - MMM - yyyy'}}
 				td {{t.info}}
 				td 
-					<button data-ng-click="removetempovertime($index)">Remove</button>
+					button.btn.btn-danger(ng-click='removetempovertime($index)') Remove
 			tr
-				td
+				td(colspan=5)
 					div(ng-show='temp_input.length')
-						button.btn(ng-click='addovertimearray()') Confirm Insert
-		table.table.table-stripped
+						button.form-control.btn-info(ng-click='addovertimearray()') Confirm Insert
+		table.table.table-striped
 			tr(ng-repeat='o in overtimes')
 				td {{o.name}}
 				td {{o.duration}}
@@ -32,7 +32,6 @@ block CONTENT
 	script.
 		var app = angular.module('overtime_app',[])
 		app.controller('overtime_ctrl',function($scope, $http) {
-
 			$scope.temp_input=[]
 			$scope.overtimeform={}
 
@@ -51,21 +50,8 @@ block CONTENT
 		            $scope.overtimes=data
 		        })
 		        response.error(function(data, status, headers, config) {
-		            alert("Error.")
+		            alert("Error showing overtime(s)!")
 		        })
-		    }
-		    
-
-			$scope.addovertime = function() {
-				option={month:'2-digit',year:'numeric',day:'2-digit'}
-		    	$scope.overtimeform.date_modified=$scope.overtimeform.date.toLocaleString('en-US',option)
-		    	console.log($scope.overtimeform.date_modified)
-		    	cfg={
-			        	method:'POST',
-			        	url:'/overtime/add',
-			        	data:$scope.overtimeform
-			        }
-		    	$http.post('/overtime/add', $scope.overtimeform, cfg).then(function(x){$scope.showovertime()}, function(y){alert('error')});
 		    }
 		    $scope.addovertimearray = function() {
 				option={month:'2-digit',year:'numeric',day:'2-digit'}
@@ -76,7 +62,7 @@ block CONTENT
 			        	url:'/overtime/addarray',
 			        	data:$scope.temp_input
 			        }
-		    	$http.post('/overtime/addarray', $scope.temp_input, cfg).then(function(x){$scope.showovertime()}, function(y){alert('error')});
+		    	$http.post('/overtime/addarray', $scope.temp_input, cfg).then(function(x){$scope.showovertime();$scope.temp_input.splice(0,$scope.temp_input.length)}, function(y){alert('Failed to register overtime(s)!')});
 		    }
 		    $scope.getemployees = function() {
 		    	$scope.employees=[]
@@ -85,7 +71,7 @@ block CONTENT
 		            $scope.employees=data
 		        })
 		        response.error(function(data, status, headers, config) {
-		            alert("Error.")
+		            alert("Error getting employee list!")
 		        })
 		    }
 		    $scope.getemployees()

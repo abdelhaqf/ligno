@@ -6,7 +6,6 @@ bootstrap=require('bootstrap-styl')
 mysql=require('mysql')
 bodyparser=require('body-parser')
 
-
 app=express()
 
 app.use(bodyparser.json())
@@ -32,33 +31,6 @@ function getOvertimes(res){
 		res.send(rows)
 	})	
 }
-function addOvertimes(req,res){
-	console.log(req.body.date)
-	x = req.body.date.replace("T"," ")
-	x = x.substring(0, x.length - 5); 
-	console.log('abdel : '+x)
-	t_date=req.body.date_modified.substring(3,5)
-	t_month=req.body.date_modified.substring(0,2)
-	t_year=req.body.date_modified.substring(6,10)
-	t_mysql_date=t_year+'-'+t_month+'-'+t_date
-	console.log('last : '+t_mysql_date)
-	console.log(typeof(req.body.date))
-	temp=connection.query(
-		"insert into overtimes(employee_id,date,duration,info) values(?,?,?,?)",
-		[
-			req.body.emp_id,
-			t_mysql_date,
-			req.body.duration,
-			req.body.info
-		],function(err,results){
-			if(!err)res.send('OK')
-			else {
-				//console.log(err)
-				res.statusCode=400
-				res.send('error')
-			}
-	})
-}
 function addOvertimesarray(req,res){
 	console.log(req.body)
 	is_error=false
@@ -79,7 +51,6 @@ function addOvertimesarray(req,res){
 			],function(err,results){
 				if(err){
 					is_error=true
-					//console.log(err)
 				}
 		})
 	}
@@ -104,9 +75,6 @@ app.get('/overtime',function(req,res){
 app.get('/overtime/show',function(req,res){
 	getOvertimes(res)
 })
-app.post('/overtime/add',function(req,res){
-	addOvertimes(req,res)
-})
 app.post('/overtime/addarray',function(req,res){
 	addOvertimesarray(req,res)
 })
@@ -114,7 +82,6 @@ app.get('/employees',function(req,res){
 	getEmployees(res)
 })
 //route end
-
 
 app.use(stylus({
 	src:'public',
