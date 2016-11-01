@@ -34,11 +34,20 @@ function getOvertimes(res){
 }
 function addOvertimes(req,res){
 	console.log(req.body.date)
+	x = req.body.date.replace("T"," ")
+	x = x.substring(0, x.length - 5); 
+	console.log('abdel : '+x)
+	t_date=req.body.date_modified.substring(3,5)
+	t_month=req.body.date_modified.substring(0,2)
+	t_year=req.body.date_modified.substring(6,10)
+	t_mysql_date=t_year+'-'+t_month+'-'+t_date
+	console.log('last : '+t_mysql_date)
+	console.log(typeof(req.body.date))
 	temp=connection.query(
 		"insert into overtimes(employee_id,date,duration,info) values(?,?,?,?)",
 		[
 			req.body.emp_id,
-			req.body.date,
+			t_mysql_date,
 			req.body.duration,
 			req.body.info
 		],function(err,results){

@@ -14,7 +14,7 @@ block CONTENT
 			tr(ng-repeat='o in overtimes')
 				td {{o.name}}
 				td {{o.duration}}
-				td {{o.date}}
+				td {{o.date|date:'d - MMM - yyyy'}}
 				td {{o.info}}
 	script.
 		var app = angular.module('overtime_app',[])
@@ -30,8 +30,11 @@ block CONTENT
 		        })
 		    }
 		    $scope.overtimeform={}
+
 			$scope.addovertime = function() {
-		    	
+				option={month:'2-digit',year:'numeric',day:'2-digit'}
+		    	$scope.overtimeform.date_modified=$scope.overtimeform.date.toLocaleString('en-US',option)
+		    	console.log($scope.overtimeform.date_modified)
 		    	cfg={
 			        	method:'POST',
 			        	url:'/overtime/add',
