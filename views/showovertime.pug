@@ -1,0 +1,30 @@
+extends template
+block CONTENT
+	div.panel.panel-primary(ng-app='showovertime_app',ng-controller='showovertime_ctrl')
+		div.panel-heading Table
+		div.panel-body
+			button.btn.btn-info(type='button',data-toggle='collapse',data-target='#toggle-this') click me mofo!
+			
+			div.collapse#toggle-this 
+				div.wellwow man wow
+		table.table.table-striped
+			tr(ng-repeat='o in overtimes')
+				td {{o.name}}
+				td {{o.duration}}
+				td {{o.date|date:'d - MMM - yyyy'}}
+				td {{o.info}}
+	script.
+		var app = angular.module('showovertime_app',[])
+		app.controller('showovertime_ctrl',function($scope, $http) {
+		    $scope.showovertime = function() {
+		    	$scope.overtimes=[]
+		        var response = $http.get('/overtime/show')
+		        response.success(function(data, status, headers, config) {
+		            $scope.overtimes=data
+		        })
+		        response.error(function(data, status, headers, config) {
+		            alert("Error showing overtime(s)!")
+		        })
+		    }
+		    $scope.showovertime()
+		})

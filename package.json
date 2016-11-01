@@ -11,9 +11,11 @@
   "dependencies": {
     "angular": "^1.5.8",
     "body-parser": "^1.15.2",
+    "bootstrap": "^3.3.7",
     "bootstrap-styl": "^5.0.8",
     "express": "^4.14.0",
     "express-stylus": "^0.1.0",
+    "jquery": "^3.1.1",
     "mysql": "^2.11.1",
     "nib": "^1.1.2",
     "pug": "^2.0.0-beta6"

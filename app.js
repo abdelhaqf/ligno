@@ -32,15 +32,12 @@ function getOvertimes(res){
 	})	
 }
 function addOvertimesarray(req,res){
-	console.log(req.body)
 	is_error=false
 	for(i=0;i<req.body.length;i++){
 		t_date=req.body[i].date_modified.substring(3,5)
 		t_month=req.body[i].date_modified.substring(0,2)
 		t_year=req.body[i].date_modified.substring(6,10)
 		t_mysql_date=t_year+'-'+t_month+'-'+t_date
-		console.log('last : '+t_mysql_date)
-		console.log(typeof(req.body.date))
 		temp=connection.query(
 			"insert into overtimes(employee_id,date,duration,info) values(?,?,?,?)",
 			[
@@ -70,6 +67,9 @@ app.get('/',function(req,res){
 })
 app.get('/overtime',function(req,res){
 	res.render('overtime')
+})
+app.get('/showovertime',function(req,res){
+	res.render('showovertime')
 })
 app.get('/overtime/show',function(req,res){
 	getOvertimes(res)
